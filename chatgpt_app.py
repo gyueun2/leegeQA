@@ -1,6 +1,5 @@
 import openai
 import streamlit as st
-from streamlit_chat import message
  
 openai.api_key = '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'
 
