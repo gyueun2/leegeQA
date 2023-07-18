@@ -5,38 +5,33 @@ from streamlit_chat import message
 openai.api_key = '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'
 
 
-def generate_response(prompt):
-    completions = openai.Completion.create (
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=1024,
-        stop=None,
-        temperature=0,
-        top_p=1,
-    )
- 
-    message = completions["choices"][0]["text"].replace("\n", "")
-    return message
-
 st.header("🤖Leege's ChatGPT-3 (Demo)")
 st.markdown("cilab")
- 
-if 'generated' not in st.session_state:
-    st.session_state['generated'] = []
- 
-if 'past' not in st.session_state:
-    st.session_state['past'] = []
- 
-with st.form('form', clear_on_submit=True):
-    user_input = st.text_input('You: ', '', key='input')
-    submitted = st.form_submit_button('Send')
- 
-if submitted and user_input:
-    output = generate_response(user_input)
-    st.session_state.past.append(user_input)
-    st.session_state.generated.append(output)
- 
-if st.session_state['generated']:
-    for i in range(len(st.session_state['generated'])-1, -1, -1):
-        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
-        message(st.session_state["generated"][i], key=str(i))
+
+# ChatGPT 모델과 관련한 설정
+model_name = "gpt-3.5-turbo"
+
+def generate_response(prompt):
+    # ChatGPT를 사용하여 응답 생성
+    response = openai.Completion.create(
+        engine=model_name,
+        prompt=prompt,
+        max_tokens=100
+    )
+    return response.choices[0].text.strip()
+
+# Streamlit 앱 코드
+def main():
+    st.title("ChatGPT 연동 예제")
+    st.write("ChatGPT와 대화해보세요!")
+
+    # 사용자 입력 받기
+    user_input = st.text_input("사용자 입력:")
+
+    if user_input:
+        # ChatGPT로부터 응답 생성
+        response = generate_response(user_input)
+        st.text_area("ChatGPT 응답:", value=response, height=200)
+
+if __name__ == "__main__":
+    main()
