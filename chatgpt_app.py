@@ -1,7 +1,7 @@
 import openai
 import streamlit as st
  
-openai.api_key = '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'
+openai.api_key = "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"
 
 
 st.header("🤖Leege's ChatGPT-3 (Demo)")
